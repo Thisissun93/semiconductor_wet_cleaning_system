@@ -1,5 +1,14 @@
 # Semiconductor Wet Cleaning Monitoring System
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://semiconductor-wet-cleaning-system.streamlit.app)
+
+## 🚀 Live Demo
+
+**👉 https://semiconductor-wet-cleaning-system.streamlit.app**
+
+---
+
+반도체 Wet Cleaning 공정의 MES 데이터를 기반으로...
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-MES-003B57?logo=sqlite&logoColor=white)
