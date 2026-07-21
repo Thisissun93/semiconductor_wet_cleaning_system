@@ -1,5 +1,12 @@
 # Semiconductor Wet Cleaning Monitoring System
 
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-MES-003B57?logo=sqlite&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-Random%20Forest-F7931E?logo=scikitlearn&logoColor=white)
+![SHAP](https://img.shields.io/badge/SHAP-Explainable%20AI-6A5ACD)
+![Plotly](https://img.shields.io/badge/Plotly-Visualization-3F4F75?logo=plotly&logoColor=white)
+
 반도체 Wet Cleaning 공정의 MES 데이터를 기반으로 공정 이상 감지, 원인 분석, 조치 추천, SPC 관리 및 설비 이상 예측을 수행하는 제조 데이터 분석 프로젝트입니다.
 
 단순한 데이터 시각화가 아니라 다음과 같은 현업 분석 흐름을 하나의 시스템으로 구현했습니다.
