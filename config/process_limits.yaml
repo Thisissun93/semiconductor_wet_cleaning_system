@@ -1,0 +1,188 @@
+project:
+  process_name: "Semiconductor Wet Cleaning"
+  unit_system: "engineering"
+  specification_version: "1.0"
+
+severity:
+  normal: "NORMAL"
+  watch: "WATCH"
+  warning: "WARNING"
+  critical: "CRITICAL"
+
+quality:
+  yield_percent:
+    display_name: "수율"
+    unit: "%"
+    direction: "higher_is_better"
+    normal_min: 96.0
+    warning_min: 94.0
+    critical_min: 92.0
+
+  particle_count:
+    display_name: "Particle"
+    unit: "count/lot"
+    direction: "lower_is_better"
+    normal_max: 14
+    watch_max: 17
+    warning_max: 24
+    critical_min: 25
+
+  metal_contamination_ppb:
+    display_name: "금속 오염도"
+    unit: "ppb"
+    direction: "lower_is_better"
+    normal_max: 0.50
+    watch_max: 0.70
+    warning_max: 1.00
+    critical_min: 1.01
+
+  water_mark_count:
+    display_name: "Water Mark"
+    unit: "count/lot"
+    direction: "lower_is_better"
+    normal_max: 2
+    watch_max: 4
+    warning_max: 7
+    critical_min: 8
+
+  organic_residue_count:
+    display_name: "유기 잔사"
+    unit: "count/lot"
+    direction: "lower_is_better"
+    normal_max: 2
+    watch_max: 4
+    warning_max: 7
+    critical_min: 8
+
+  pattern_collapse_count:
+    display_name: "Pattern Collapse"
+    unit: "count/lot"
+    direction: "lower_is_better"
+    normal_max: 1
+    watch_max: 2
+    warning_max: 4
+    critical_min: 5
+
+equipment:
+  pump_pressure:
+    display_name: "Pump Pressure"
+    unit: "bar"
+    normal_min: 1.95
+    normal_max: 2.25
+    warning_min: 1.80
+    warning_max: 2.40
+    critical_min: 1.65
+    critical_max: 2.55
+
+  flow_rate:
+    display_name: "Flow Rate"
+    unit: "L/min"
+    direction: "higher_is_better"
+    normal_min: 17.0
+    watch_min: 16.5
+    warning_min: 15.5
+    critical_max: 15.49
+
+  filter_differential_pressure:
+    display_name: "Filter Differential Pressure"
+    unit: "bar"
+    direction: "lower_is_better"
+    normal_max: 1.20
+    watch_max: 1.49
+    warning_max: 1.99
+    critical_min: 2.00
+
+  nozzle_pressure:
+    display_name: "Nozzle Pressure"
+    unit: "bar"
+    normal_min: 1.45
+    normal_max: 1.65
+    warning_min: 1.35
+    warning_max: 1.75
+    critical_min: 1.25
+    critical_max: 1.85
+
+  motor_current:
+    display_name: "Motor Current"
+    unit: "A"
+    direction: "lower_is_better"
+    normal_max: 7.60
+    watch_max: 7.90
+    warning_max: 8.30
+    critical_min: 8.31
+
+  vibration:
+    display_name: "Vibration"
+    unit: "mm/s"
+    direction: "lower_is_better"
+    normal_max: 1.00
+    watch_max: 1.20
+    warning_max: 1.50
+    critical_min: 1.51
+
+  exhaust_pressure:
+    display_name: "Exhaust Pressure"
+    unit: "bar"
+    normal_min: -0.50
+    normal_max: -0.35
+    warning_min: -0.55
+    warning_max: -0.30
+    critical_min: -0.60
+    critical_max: -0.25
+
+process:
+  bath_age_hours:
+    display_name: "Chemical Bath Age"
+    unit: "hour"
+    direction: "lower_is_better"
+    normal_max: 12.0
+    watch_max: 16.0
+    warning_max: 20.0
+    critical_min: 20.01
+
+  diw_resistivity:
+    display_name: "DI Water Resistivity"
+    unit: "MOhm-cm"
+    direction: "higher_is_better"
+    normal_min: 17.8
+    watch_min: 17.5
+    warning_min: 17.0
+    critical_max: 16.99
+
+  concentration_deviation_percent:
+    display_name: "Chemical Concentration Deviation"
+    unit: "%"
+    direction: "lower_is_better"
+    normal_max: 2.0
+    watch_max: 3.0
+    warning_max: 5.0
+    critical_min: 5.01
+
+  temperature_deviation:
+    display_name: "Bath Temperature Deviation"
+    unit: "degC"
+    direction: "lower_is_better"
+    normal_max: 1.5
+    watch_max: 2.0
+    warning_max: 3.0
+    critical_min: 3.01
+
+trend_detection:
+  consecutive_increase_count: 5
+  consecutive_decrease_count: 5
+  consecutive_same_side_count: 7
+  rolling_window_size: 8
+  mean_shift_sigma: 1.5
+  spc_sigma_limit: 3.0
+
+report:
+  recent_lot_window: 12
+  comparison_lot_window: 12
+
+  overall_status:
+    critical_anomaly_count: 1
+    warning_anomaly_count: 3
+    watch_anomaly_count: 5
+
+  top_cause_count: 3
+  top_action_count: 3

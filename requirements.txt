@@ -1,0 +1,15 @@
+pandas
+numpy
+scipy
+statsmodels
+scikit-learn
+shap
+
+plotly
+streamlit
+
+jinja2
+pyyaml
+sqlalchemy
+
+pytest
