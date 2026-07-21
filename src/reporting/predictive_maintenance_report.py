@@ -41,13 +41,39 @@ RISK_ORDER: Final[dict[str, int]] = {
 
 
 def _find_font(candidates: list[Path]) -> Path:
+    """Windows와 Linux 배포 환경에서 사용 가능한 한글 폰트를 찾습니다."""
+
     for candidate in candidates:
         if candidate.exists():
             return candidate
 
+    linux_font_roots = [
+        Path("/usr/share/fonts"),
+        Path("/usr/local/share/fonts"),
+    ]
+
+    preferred_names = [
+        "NanumGothic.ttf",
+        "NanumGothicBold.ttf",
+        "NotoSansCJK-Regular.ttc",
+        "NotoSansCJK-Bold.ttc",
+        "NotoSansKR-Regular.ttf",
+        "NotoSansKR-Bold.ttf",
+    ]
+
+    for font_root in linux_font_roots:
+        if not font_root.exists():
+            continue
+
+        for font_name in preferred_names:
+            matches = list(font_root.rglob(font_name))
+            if matches:
+                return matches[0]
+
     raise FileNotFoundError(
         "PDF 한글 폰트를 찾지 못했습니다. "
-        "Windows에서는 C:/Windows/Fonts/malgun.ttf를 확인하세요."
+        "Streamlit Cloud에서는 저장소 루트의 packages.txt에 "
+        "fonts-nanum을 추가한 뒤 앱을 재부팅하세요."
     )
 
 
@@ -58,6 +84,8 @@ def register_korean_fonts() -> None:
         [
             Path("C:/Windows/Fonts/malgun.ttf"),
             Path("/usr/share/fonts/truetype/nanum/NanumGothic.ttf"),
+            Path("/usr/share/fonts/truetype/nanum-gothic/NanumGothic.ttf"),
+            Path("/usr/share/fonts/truetype/nanum/NanumGothicCoding.ttf"),
             Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
         ]
     )
@@ -67,6 +95,7 @@ def register_korean_fonts() -> None:
             Path("C:/Windows/Fonts/malgunbd.ttf"),
             Path("C:/Windows/Fonts/malgun.ttf"),
             Path("/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf"),
+            Path("/usr/share/fonts/truetype/nanum-gothic/NanumGothicBold.ttf"),
             Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"),
             regular_path,
         ]
