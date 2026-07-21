@@ -11,6 +11,36 @@
 
 단순한 데이터 시각화가 아니라 다음과 같은 현업 분석 흐름을 하나의 시스템으로 구현했습니다.
 
+## 📷 Dashboard Preview
+
+### Main Dashboard
+
+![Main Dashboard](images/dashboard_main.png)
+
+---
+
+### SPC Dashboard
+
+![SPC Dashboard](images/dashboard_spc.png)
+
+---
+
+### Predictive Maintenance
+
+![Predictive Maintenance](images/dashboard_pm.png)
+
+---
+
+### SHAP Explainability
+
+![SHAP](images/dashboard_shap.png)
+
+---
+
+### Executive PDF Report
+
+![PDF Report](images/dashboard_pdf.png)
+
 ```mermaid
 flowchart TD
     A[(SQLite MES Database)]

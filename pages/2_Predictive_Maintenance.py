@@ -26,6 +26,10 @@ from src.predictive_maintenance.shap_explainer import (  # noqa: E402
     save_shap_results,
 )
 
+from src.reporting.predictive_maintenance_report import (  # noqa: E402
+    generate_predictive_maintenance_report,
+)
+
 
 MODEL_DIRECTORY: Final[Path] = (
     PROJECT_ROOT
@@ -1528,6 +1532,85 @@ def render_shap_detail_table(
     )
 
 
+
+def render_predictive_maintenance_pdf(
+    prediction_dataframe: pd.DataFrame,
+    metrics: dict[str, object],
+    feature_importance: pd.DataFrame,
+    shap_dataframe: pd.DataFrame,
+    selected_equipment: str,
+) -> None:
+    """현재 화면의 분석 결과를 Predictive Maintenance PDF로 제공합니다."""
+
+    st.markdown(
+        '<div class="pm-section-title">'
+        "Predictive Maintenance PDF Report"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+        <div class="pm-section-description">
+            현재 선택된 설비 범위의 예측 결과, 예방보전 권장 조치,
+            모델 성능, Feature Importance 및 SHAP 분석을 PDF로 생성합니다.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    session_key = (
+        "predictive_maintenance_pdf_"
+        f"{selected_equipment}"
+    )
+
+    if st.button(
+        "PDF 보고서 생성",
+        type="primary",
+        use_container_width=True,
+        key="generate_predictive_maintenance_pdf",
+    ):
+        try:
+            with st.spinner(
+                "Predictive Maintenance PDF 보고서를 생성하는 중입니다..."
+            ):
+                report_path = generate_predictive_maintenance_report(
+                    prediction_dataframe=prediction_dataframe,
+                    metrics=metrics,
+                    feature_importance=feature_importance,
+                    shap_dataframe=shap_dataframe,
+                    selected_equipment=selected_equipment,
+                )
+
+                st.session_state[session_key] = {
+                    "bytes": report_path.read_bytes(),
+                    "name": report_path.name,
+                }
+
+            st.success(
+                "Predictive Maintenance PDF 보고서가 생성되었습니다."
+            )
+
+        except Exception as error:
+            st.error(
+                "PDF 보고서 생성 중 오류가 발생했습니다."
+            )
+            st.exception(error)
+
+    report_data = st.session_state.get(
+        session_key
+    )
+
+    if report_data:
+        st.download_button(
+            label="PDF 보고서 다운로드",
+            data=report_data["bytes"],
+            file_name=report_data["name"],
+            mime="application/pdf",
+            use_container_width=True,
+            key="download_predictive_maintenance_pdf",
+        )
+
 def main() -> None:
     """Predictive Maintenance Dashboard 전체 화면을 실행합니다."""
 
@@ -1630,6 +1713,14 @@ def main() -> None:
             shap_dataframe=shap_dataframe,
             selected_equipment=selected_equipment,
             shap_count=shap_count,
+        )
+
+        render_predictive_maintenance_pdf(
+            prediction_dataframe=filtered_dataframe,
+            metrics=metrics,
+            feature_importance=feature_importance,
+            shap_dataframe=shap_dataframe,
+            selected_equipment=selected_equipment,
         )
 
     except FileNotFoundError as error:
