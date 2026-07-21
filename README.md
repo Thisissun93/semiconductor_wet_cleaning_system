@@ -4,7 +4,6 @@
 
 단순한 데이터 시각화가 아니라 다음과 같은 현업 분석 흐름을 하나의 시스템으로 구현했습니다.
 
-````markdown
 ```mermaid
 flowchart TD
     A[(SQLite MES Database)]
