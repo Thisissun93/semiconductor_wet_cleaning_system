@@ -4,23 +4,34 @@
 
 단순한 데이터 시각화가 아니라 다음과 같은 현업 분석 흐름을 하나의 시스템으로 구현했습니다.
 
-```text
-MES 데이터
-    ↓
-Rule-based 이상 감지
-    ↓
-Root Cause Analysis
-    ↓
-Action Recommendation
-    ↓
-SPC 공정 관리
-    ↓
-Predictive Maintenance
-    ↓
-SHAP 예측 원인 분석
-    ↓
-Streamlit Dashboard / Executive PDF Report
-```
+````markdown
+```mermaid
+flowchart TD
+    A[(SQLite MES Database)]
+    B[Data Validation<br/>and Preprocessing]
+    C[Rule-based<br/>Anomaly Detection]
+    D[Root Cause<br/>Analysis]
+    E[Action<br/>Recommendation]
+    F[SPC Dashboard<br/>Cp / Cpk / Control Chart]
+    G[Predictive Maintenance<br/>Random Forest]
+    H[SHAP Explainability<br/>Prediction Reason]
+    I[Streamlit Dashboard]
+    J[Executive PDF Report]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+
+    B --> F
+    B --> G
+    G --> H
+
+    E --> I
+    F --> I
+    H --> I
+
+    I --> J
 
 ---
 
