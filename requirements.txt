@@ -3,6 +3,7 @@ pandas
 numpy
 plotly
 matplotlib
+scipy
 scikit-learn
 shap
 joblib
