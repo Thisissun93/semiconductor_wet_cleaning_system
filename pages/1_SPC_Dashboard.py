@@ -16,6 +16,9 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 
+from src.analysis.spc_analysis import (  # noqa: E402
+    calculate_spc_statistics as compute_spc_statistics,
+)
 from src.data_processing.analysis_repository import (  # noqa: E402
     load_equipment_ids,
     load_lot_trend,
@@ -127,93 +130,13 @@ def calculate_spc_statistics(
     lsl: float,
     usl: float,
 ) -> dict[str, float | int | str]:
-    """선택 변수의 SPC 통계량을 계산합니다."""
+    """선택 변수의 SPC 통계량을 계산합니다(I-MR 기준)."""
 
-    values = (
-        pd.to_numeric(
-            dataframe[parameter],
-            errors="coerce",
-        )
-        .dropna()
+    return compute_spc_statistics(
+        dataframe[parameter],
+        lsl=lsl,
+        usl=usl,
     )
-
-    if values.empty:
-        raise ValueError(
-            "선택한 변수에 분석 가능한 데이터가 없습니다."
-        )
-
-    mean_value = float(values.mean())
-
-    standard_deviation = float(
-        values.std(ddof=1)
-    )
-
-    ucl = mean_value + 3 * standard_deviation
-    lcl = mean_value - 3 * standard_deviation
-
-    if standard_deviation == 0:
-        cp = 0.0
-        cpk = 0.0
-
-    else:
-        cp = (
-            usl - lsl
-        ) / (
-            6 * standard_deviation
-        )
-
-        cpu = (
-            usl - mean_value
-        ) / (
-            3 * standard_deviation
-        )
-
-        cpl = (
-            mean_value - lsl
-        ) / (
-            3 * standard_deviation
-        )
-
-        cpk = min(cpu, cpl)
-
-    specification_out_count = int(
-        (
-            (values < lsl)
-            | (values > usl)
-        ).sum()
-    )
-
-    control_out_count = int(
-        (
-            (values < lcl)
-            | (values > ucl)
-        ).sum()
-    )
-
-    if cpk >= 1.67:
-        process_grade = "Excellent"
-
-    elif cpk >= 1.33:
-        process_grade = "Capable"
-
-    elif cpk >= 1.0:
-        process_grade = "Marginal"
-
-    else:
-        process_grade = "Improvement Required"
-
-    return {
-        "mean": mean_value,
-        "standard_deviation": standard_deviation,
-        "ucl": ucl,
-        "lcl": lcl,
-        "cp": float(cp),
-        "cpk": float(cpk),
-        "specification_out_count": specification_out_count,
-        "control_out_count": control_out_count,
-        "process_grade": process_grade,
-        "data_count": len(values),
-    }
 
 
 def render_sidebar() -> tuple[str | None, str, int]:
@@ -303,8 +226,10 @@ def render_spc_kpis(
     )
 
     column2.metric(
-        "표준편차",
-        f"{float(statistics['standard_deviation']):.3f}",
+        "σ 군내 / 전체",
+        f"{float(statistics['sigma_within']):.3f}"
+        f" / {float(statistics['sigma_overall']):.3f}",
+        help="군내 σ = MR̄/1.128 (관리한계·Cp/Cpk), 전체 σ = 표본 표준편차 (Pp/Ppk)",
     )
 
     column3.metric(
@@ -313,8 +238,9 @@ def render_spc_kpis(
     )
 
     column4.metric(
-        "Cpk",
-        f"{float(statistics['cpk']):.3f}",
+        "Cpk / Ppk",
+        f"{float(statistics['cpk']):.3f}"
+        f" / {float(statistics['ppk']):.3f}",
     )
 
     column5, column6, column7, column8 = st.columns(4)

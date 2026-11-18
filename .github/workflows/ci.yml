@@ -38,8 +38,13 @@ jobs:
 
       - name: Check Python syntax
         run: |
-          python -m compileall app.py pages src tests
+          python -m compileall app.py pages src scripts tests
 
       - name: Run tests
         run: |
           python -m pytest tests -v
+
+      - name: Re-run independent validation
+        run: |
+          python scripts/validate_stats.py
+          git diff --exit-code docs/stats_validation.md
