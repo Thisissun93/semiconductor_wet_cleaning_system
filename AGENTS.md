@@ -27,3 +27,5 @@ python scripts/validate_stats.py   # docs/stats_validation.md가 바뀌면 커�
 - 화면, DB 저장 결과, PDF 보고서가 같은 계산 결과를 써야 합니다.
 - SQL은 매개변수 바인딩을 쓰고, 사용자 입력을 문자열로 이어 붙이지 않습니다.
 - 계산 로직을 바꾸면 테스트와 `docs/stats_validation.md`를 함께 갱신해야 합니다.
+
+- README 맨 위의 영어 요약(English summary)에 있는 수치는 한국어 본문·docs와 같아야 합니다. 수치를 바꾸는 PR에서 영어 요약이 갱신되지 않았으면 지적하세요.

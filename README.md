@@ -3,6 +3,13 @@
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://semiconductor-wet-cleaning-system.streamlit.app)
 [![Python CI](https://github.com/Thisissun93/semiconductor_wet_cleaning_system/actions/workflows/ci.yml/badge.svg)](https://github.com/Thisissun93/semiconductor_wet_cleaning_system/actions/workflows/ci.yml)
 
+> **English summary** — Monitoring app for a semiconductor wet cleaning process, using MES-style data. It flags abnormal lots by rule, ranks possible causes, suggests actions, shows I-MR SPC with Cp/Cpk and Pp/Ppk, and makes a PDF report.
+>
+> - **Result:** It checks 120 lots × 17 items (2,040 checks), then gives causes and actions, in about 0.15 seconds. ([benchmark](docs/BENCHMARK.md))
+> - **Check:** SPC values, all 2,040 grades and 3,888 model features match an independent recalculation. This check found 8 wrong grades, and I fixed them. ([validation](docs/stats_validation.md))
+> - Limit: the predictive maintenance model is not better than a simple baseline yet. The validation page shows the numbers.
+> - All data is synthetic. The numbers check the method and the calculations, not accuracy in a real factory.
+
 ## 🚀 Live Demo
 
 **👉 https://semiconductor-wet-cleaning-system.streamlit.app**
