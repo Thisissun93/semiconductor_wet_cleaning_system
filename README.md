@@ -1,6 +1,7 @@
 # Semiconductor Wet Cleaning Monitoring System
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://semiconductor-wet-cleaning-system.streamlit.app)
+[![Python CI](https://github.com/Thisissun93/semiconductor_wet_cleaning_system/actions/workflows/ci.yml/badge.svg)](https://github.com/Thisissun93/semiconductor_wet_cleaning_system/actions/workflows/ci.yml)
 
 ## 🚀 Live Demo
 
@@ -104,6 +105,30 @@ Wet Cleaning 공정에서는 Particle, Filter 차압, 유량, Motor Current, 진
 
 ---
 
+## 측정과 검증
+
+| 구분 | 결과 | 근거 |
+|---|---|---|
+| 업무 시나리오 | LOT 120개 × 항목 17개(2,040건) 판정 → 원인 후보 106건 → 조치 추천 216건까지 약 0.15초 | [docs/BENCHMARK.md](docs/BENCHMARK.md) |
+| 사례 | LOT-202607-0114: CRITICAL 5항목 → 원인 1순위 Filter 막힘(41%) → 조치 1순위 Filter 즉시 교체 | 같은 문서 |
+| 독립 계산 대조 | SPC 84값, 규칙 등급 2,040건, 예지보전 특징량 3,888값·라벨 108건 모두 일치 | [docs/stats_validation.md](docs/stats_validation.md) |
+| 테스트 | pytest 45개, CI에서 대조 스크립트 재실행 | `.github/workflows/ci.yml` |
+
+대조 과정에서 고친 것:
+
+- **범위형 항목 등급 역전**: Pump·Nozzle Pressure가 경고 한계와 위험 한계 사이에 있으면 `WATCH`로 판정되어, 경고 범위 안 값(`WARNING`)보다 등급이 낮았습니다. 8건이 해당되어 `WARNING`으로 바로잡고 원인·조치 결과를 다시 생성했습니다.
+- **SPC 관리한계·Cp/Cpk 산식**: 전체 표준편차로 계산하던 것을 I-MR 표준(MR̄/1.128)으로 바꾸고, 전체 표준편차 지표는 Pp/Ppk로 따로 표시합니다.
+
+예지보전 모델은 현재 데이터로 성능을 주장하기 어렵습니다. 평가 데이터 22행 중 음성이 3행뿐이고, 모델 정확도(0.864)가 전부 '이상'으로 찍는 기준선과 같으며 음성을 하나도 맞히지 못했습니다. 자세한 내용은 검증 문서에 있습니다.
+
+```bash
+python scripts/validate_stats.py      # 독립 계산 대조
+python scripts/benchmark_scenario.py  # 업무 시나리오 측정
+python -m pytest tests -q
+```
+
+---
+
 ## 2. Key Features
 
 ### Rule-based Anomaly Detection
@@ -179,7 +204,12 @@ LOT 단위 공정 데이터를 이용하여 공정 평균, 산포 및 관리 상
 - Specification Violation
 - Control Limit Violation
 
-현재 데이터는 LOT 단위이므로 Individual Control Chart 방식으로 구현했습니다.
+현재 데이터는 LOT 단위이므로 I-MR(Individual-Moving Range) 관리도로 구현했습니다.
+
+- 관리한계와 Cp/Cpk: 군내 σ = MR̄ / 1.128
+- Pp/Ppk: 전체 σ(표본 표준편차)
+- 관리한계(공정이 내는 변동)와 규격한계(LSL/USL, 요구 사양)는 따로 계산·표시합니다.
+- 계산은 `src/analysis/spc_analysis.py` 한 곳에 있고, 화면은 이 함수를 호출합니다.
 
 ---
 
@@ -524,6 +554,8 @@ flow_rate_change_1
 
 예지보전에서는 실제 이상을 정상으로 잘못 판단하는 False Negative가 중요하므로 Accuracy뿐 아니라 Recall을 함께 확인해야 합니다.
 
+현재 저장된 결과(`models/predictive_maintenance/model_metrics.json`)는 평가 데이터 22행 중 음성 3행이고 TN이 0입니다. Recall 1.0과 Accuracy 0.864는 모든 행을 '이상'으로 예측해도 나오는 값이므로 성능 근거로 쓰지 않습니다. 의미 있는 평가에는 시간 순서 분할과 정상 구간이 충분한 데이터가 필요합니다.
+
 ---
 
 ## 9. Installation
@@ -711,7 +743,8 @@ SHAP 분석 또한 인과관계를 증명하는 것이 아니라 모델 예측�
 - 실제 생산 MES가 아닌 프로젝트용 데이터 사용
 - LOT 단위 데이터 기반 분석
 - 실제 설비 고장 정비 이력과 Label의 제한
-- 시간 기반 검증보다 기본 Train/Test Split 중심
+- 시간 기반 검증보다 기본 Train/Test Split 중심 (겹치는 5 LOT 윈도가 학습·평가에 섞임)
+- 데이터 끝부분 LOT 8건은 이후 LOT가 10개 미만이라 라벨 0을 확인할 수 없음
 - 공정 조건 변경과 제품 Mix 영향의 제한적 반영
 - 실시간 설비 통신 및 자동 제어 기능 미포함
 

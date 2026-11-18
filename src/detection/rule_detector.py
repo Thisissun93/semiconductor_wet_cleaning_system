@@ -245,9 +245,6 @@ def classify_range(
     normal_min = limits.get("normal_min")
     normal_max = limits.get("normal_max")
 
-    warning_min = limits.get("warning_min")
-    warning_max = limits.get("warning_max")
-
     critical_min = limits.get("critical_min")
     critical_max = limits.get("critical_max")
 
@@ -259,17 +256,16 @@ def classify_range(
     if normal_min <= value <= normal_max:
         return "NORMAL"
 
-    if warning_min is not None and warning_max is not None:
-        if warning_min <= value <= warning_max:
-            return "WARNING"
-
     if critical_min is not None and value < critical_min:
         return "CRITICAL"
 
     if critical_max is not None and value > critical_max:
         return "CRITICAL"
 
-    return "WATCH"
+    # 정상 범위를 벗어났지만 위험 한계 안쪽이면 WARNING입니다.
+    # Warning 한계와 Critical 한계 사이 값도 WARNING으로 판정해
+    # 정상에서 멀어질수록 등급이 낮아지는 일이 없도록 합니다.
+    return "WARNING"
 
 
 def classify_value(

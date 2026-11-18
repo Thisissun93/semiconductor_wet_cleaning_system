@@ -1,0 +1,125 @@
+{
+  "repeat": 5,
+  "lots": 120,
+  "judgements": 2040,
+  "severity": {
+    "CRITICAL": 39,
+    "WARNING": 55,
+    "WATCH": 72
+  },
+  "flagged_lots": 35,
+  "cause_rows": 106,
+  "action_rows": 216,
+  "median_seconds": {
+    "detect": 0.025977880000027653,
+    "root_cause": 0.12003293300006135,
+    "action": 0.011300296000058552,
+    "total": 0.15186370400010674
+  },
+  "scenario": {
+    "lot_id": "LOT-202607-0114",
+    "equipment_id": "WC-03",
+    "anomalies": [
+      [
+        "bath_age_hours",
+        "CRITICAL",
+        20.375
+      ],
+      [
+        "concentration_deviation_percent",
+        "CRITICAL",
+        13.928
+      ],
+      [
+        "filter_differential_pressure",
+        "CRITICAL",
+        2.064
+      ],
+      [
+        "flow_rate",
+        "CRITICAL",
+        15.31
+      ],
+      [
+        "particle_count",
+        "CRITICAL",
+        29.0
+      ],
+      [
+        "nozzle_pressure",
+        "WARNING",
+        1.405
+      ],
+      [
+        "pump_pressure",
+        "WARNING",
+        2.411
+      ],
+      [
+        "vibration",
+        "WARNING",
+        1.261
+      ],
+      [
+        "metal_contamination_ppb",
+        "WATCH",
+        0.598
+      ],
+      [
+        "motor_current",
+        "WATCH",
+        7.777
+      ],
+      [
+        "organic_residue_count",
+        "WATCH",
+        3.0
+      ],
+      [
+        "yield_percent",
+        "WATCH",
+        94.843
+      ]
+    ],
+    "causes": [
+      [
+        1,
+        "Filter 막힘 및 교체주기 초과",
+        41.4,
+        "HIGH"
+      ],
+      [
+        2,
+        "Pump 및 Motor 성능 저하",
+        30.3,
+        "HIGH"
+      ],
+      [
+        3,
+        "약액 Bath 노화 및 교체주기 초과",
+        28.4,
+        "HIGH"
+      ]
+    ],
+    "actions": [
+      [
+        1,
+        "Wet Cleaning Filter 즉시 교체",
+        "URGENT",
+        "설비기술"
+      ],
+      [
+        2,
+        "Filter Housing 및 배관 오염 점검",
+        "URGENT",
+        "설비기술"
+      ],
+      [
+        3,
+        "Pump 및 Motor 상태 즉시 점검",
+        "URGENT",
+        "설비기술"
+      ]
+    ]
+  }
+}
